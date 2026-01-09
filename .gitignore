@@ -1,0 +1,15 @@
+# Ignore python cache
+__pycache__/
+*.py[cod]
+
+# --- CRITICAL: IGNORE LARGE DATA ---
+# GitHub will reject these. Do not remove these lines.
+bigwig/
+*.bw
+*.bigwig
+model_crispra/
+model_crispri/
+*.pkl
+*.joblib
+results_cache/
+uploads/
