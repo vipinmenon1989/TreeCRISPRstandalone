@@ -285,37 +285,6 @@ The `Energy` (MFE) feature requires ViennaRNA. Install via `conda install -c bio
 
 ---
 
-## Git push commands
-
-```bash
-# 1. Clone and set up
-git clone https://github.com/vipinmenon1989/TreeCRISPRstandalone.git
-cd TreeCRISPRstandalone
-
-# 2. Copy modernized files into place
-cp -r /path/to/TreeCRISPR_Modernized/* .
-
-# 3. Stage and commit
-git add run_treecrispr.py requirements.txt README.md TreeCRISPR.yml
-git add treecrispr/
-git commit -m "Modernize codebase: Python 3 standards, docstrings, bug fixes"
-
-# Key fixes included in this commit:
-#   - Fix typo K562_chromatin_strucutre → K562_chromatin_structure in config.py
-#   - Consolidate duplicate PAM scanner into scanner.py (was in both scanner.py
-#     and pipeline.py); pipeline now imports scan_sequence() from scanner.py
-#   - Fix df_fixed scope issue in models.py (was using `'df_fixed' in locals()`)
-#   - Add @functools.lru_cache to _map_files_to_expected_names() in features_epi.py
-#   - Change logger.info("[DEBUG] ...") to logger.debug(...) in pipeline.py
-#   - pretty_model_name() consolidated in models.py; plots.py imports it
-#   - _BASE_KEYS in plots.py changed to frozenset
-#   - Add type annotations, module docstrings, and sys.path.insert throughout
-#   - Add requirements.txt for pip-based installation
-
-git push origin main
-```
-
----
 
 ## Citation
 
