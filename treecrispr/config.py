@@ -1,33 +1,62 @@
+"""
+treecrispr/config.py — Centralised paths and environment-driven constants.
+
+Environment variables
+---------------------
+EPIG_EXTS   Comma-separated integer extensions (bp) for epigenetic window sizes.
+            Default: "0,50,150,250,500,2500"
+EPIG_AGG    Aggregation method for BigWig values: "sum" or "mean".
+            Default: "sum"
+"""
+
+from __future__ import annotations
+
 from pathlib import Path
 import os
 
-# ---- Paths (adjust BASE_DIR if needed) ----
-BASE_DIR = Path(__file__).resolve().parents[1]
+# ---------------------------------------------------------------------------
+# Directory layout (relative to this file's package root)
+# ---------------------------------------------------------------------------
+BASE_DIR: Path = Path(__file__).resolve().parents[1]
 
-UPLOAD_DIR   = BASE_DIR / "uploads"
-RESULTS_DIR  = BASE_DIR / "results_cache"
-BIGWIG_DIR   = BASE_DIR / "bigwig"
+UPLOAD_DIR: Path  = BASE_DIR / "uploads"
+RESULTS_DIR: Path = BASE_DIR / "results_cache"
+BIGWIG_DIR: Path  = BASE_DIR / "bigwig"
+MODEL_DIR_I: Path = BASE_DIR / "model_crispri"
+MODEL_DIR_A: Path = BASE_DIR / "model_crispra"
 
-MODEL_DIR_I  = BASE_DIR / "model_crispri"   # .pkl models for TreeCRISPRi
-MODEL_DIR_A  = BASE_DIR / "model_crispra"   # .pkl models for TreeCRISPRa
+# ---------------------------------------------------------------------------
+# Sequence constraints
+# ---------------------------------------------------------------------------
+MAX_SEQ_LEN: int = 500
 
-for d in (UPLOAD_DIR, RESULTS_DIR, BIGWIG_DIR, MODEL_DIR_I, MODEL_DIR_A):
-    d.mkdir(parents=True, exist_ok=True)
+# ---------------------------------------------------------------------------
+# Epigenetic feature configuration
+# ---------------------------------------------------------------------------
+EPIGENETIC_EXTENSIONS: tuple[int, ...] = tuple(
+    int(x) for x in os.getenv("EPIG_EXTS", "0,50,150,250,500,2500").split(",")
+)
 
-# ---- FASTA constraints ----
-ALLOWED_EXT = {".fa", ".fasta", ".fna"}
-MAX_SEQ_LEN = 500
+EPIG_AGGREGATION: str = os.getenv("EPIG_AGG", "sum").lower()
 
-# ---- Epigenetic feature settings ----
-EPIGENETIC_EXTENSIONS = tuple(int(x) for x in os.getenv("EPIG_EXTS", "0,50,150,250,500,2500").split(","))
-EPIG_AGGREGATION      = os.getenv("EPIG_AGG", "sum").lower()  # "sum" or "mean"
-if EPIG_AGGREGATION not in ("sum", "mean"):
-    EPIG_AGGREGATION = "sum"
-
-# ---- BigWig basenames used in training (ORDER MATTERS) ----
-EXPECTED_BIGWIGS = [
-    "H2AZ", "H3K27ac", "H3K27me3", "H3K36me3",
-    "H3K4me1", "H3K4me2", "H3K4me3", "H3K79me2",
-    "H3K9ac", "H3K9me3", "K562_chromatin_strucutre",
-    "K562_DNA_methylation", "K562_dnase"
+# ---------------------------------------------------------------------------
+# Expected BigWig track names
+# NOTE: names must exactly match the stem of the .bw / .bigwig files placed
+#       in BIGWIG_DIR, and must match the feature column names seen by the
+#       trained XGBoost models.
+# ---------------------------------------------------------------------------
+EXPECTED_BIGWIGS: list[str] = [
+    "H2AZ",
+    "H3K27ac",
+    "H3K27me3",
+    "H3K36me3",
+    "H3K4me1",
+    "H3K4me2",
+    "H3K4me3",
+    "H3K79me2",
+    "H3K9ac",
+    "H3K9me3",
+    "K562_chromatin_structure",   # fixed typo: was "strucutre"
+    "K562_DNA_methylation",
+    "K562_dnase",
 ]

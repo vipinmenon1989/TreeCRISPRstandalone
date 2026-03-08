@@ -1,0 +1,22 @@
+# TreeCRISPR — pip requirements
+# Recommended: install via conda (TreeCRISPR.yml) for pyBigWig and ViennaRNA.
+# This file is provided for environments where conda is not available.
+#
+# NOTE: pyBigWig and viennarna may require additional system libraries.
+#       On Linux: apt-get install libcurl4-openssl-dev
+#       On macOS:  brew install curl
+
+# Core scientific stack
+numpy>=1.26,<3.0
+pandas>=2.0
+scikit-learn>=1.4
+xgboost>=2.0
+joblib>=1.3
+
+# Bioinformatics
+biopython>=1.83
+pyBigWig>=0.3.22
+
+# Visualisation
+matplotlib>=3.7
+scipy>=1.11
